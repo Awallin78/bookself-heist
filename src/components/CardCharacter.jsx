@@ -1,111 +1,56 @@
-import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+const gradientMap = {
+  professor: "linear-gradient(135deg,#6D28D9,#3B82F6)",
+  tokyo: "linear-gradient(135deg,#F472B6,#FB923C)",
+  berlin: "linear-gradient(135deg,#EF4444,#F59E0B)",
+  nairobi: "linear-gradient(135deg,#10B981,#84CC16)",
+  rio: "linear-gradient(135deg,#06B6D4,#8B5CF6)",
+};
 
 export default function CardCharacter({ c }) {
-  const [imgSrc, setImgSrc] = useState(null)
-  const [imgOk, setImgOk] = useState(false)
+  const [imgOk, setImgOk] = useState(true);
 
-  useEffect(() => {
-    const filename = c?.image
-    // debug character and image field
-    // eslint-disable-next-line no-console
-    console.debug('[CardCharacter] character:', c?.id, 'image field:', filename)
-    if (!filename) {
-      setImgSrc(null)
-      setImgOk(false)
-      return
-    }
-
-    // Try Vite-resolved assets first using import.meta.glob (eager, as url)
-    let cancelled = false
-    try {
-      const modules = import.meta.glob('../assets/images/*', { eager: true, as: 'url' })
-      const key = `../assets/images/${filename}`
-      if (modules && modules[key]) {
-        const candidate = modules[key]
-        const img = new Image()
-        img.onload = () => {
-          if (cancelled) return
-          setImgSrc(candidate)
-          setImgOk(true)
-          console.debug('[CardCharacter] image loaded via glob:', candidate)
-        }
-        img.onerror = () => {
-          console.warn('[CardCharacter] glob asset failed to load:', candidate)
-          // fallthrough to public/raw candidates below
-          tryFallbacks()
-        }
-        img.src = candidate
-        return () => { cancelled = true }
-      }
-    } catch (e) {
-      // ignore glob failure
-    }
-
-    const tryFallbacks = () => {
-      const candidates = []
-      try {
-        candidates.push(new URL(`../assets/images/${filename}`, import.meta.url).href)
-      } catch (e) {}
-      candidates.push(`/images/${filename}`)
-      candidates.push(filename)
-
-      const filteredCandidates = candidates.filter((x) => typeof x === 'string' && x)
-
-      const tryNext = (idx) => {
-        if (cancelled || idx >= filteredCandidates.length) {
-          setImgOk(false)
-          setImgSrc(null)
-          console.warn('[CardCharacter] no working image candidate for', filename, 'c.id=', c?.id)
-          return
-        }
-
-        const candidate = filteredCandidates[idx]
-        const img = new Image()
-        img.onload = () => {
-          if (cancelled) return
-          setImgSrc(candidate)
-          setImgOk(true)
-          console.debug('[CardCharacter] image loaded fallback:', candidate)
-        }
-        img.onerror = () => {
-          if (cancelled) return
-          console.warn('[CardCharacter] failed to load candidate:', candidate)
-          tryNext(idx + 1)
-        }
-        img.src = candidate
-      }
-
-      tryNext(0)
-    }
-
-    tryFallbacks()
-
-    return () => { cancelled = true }
-
-    return () => {
-      cancelled = true
-    }
-  }, [c?.image])
+  const svgPath = `/images/${String(c.codename).toLowerCase()}.svg`;
+  const key = String(c.codename).toLowerCase();
+  const bg = gradientMap[key] || "linear-gradient(135deg,#111827,#0f172a)";
 
   return (
     <Link to={`/character/${c.id}`} className="block">
-      <div className="card">
-        <div className="char-row">
-          {imgSrc && imgOk ? (
-            <img src={imgSrc} alt={c.codename} className="avatar" style={{objectFit:'cover',display:'block'}} />
-          ) : (
-            <div className="avatar">{c.codename[0]}</div>
-          )}
+      <div
+        className="rounded-xl shadow p-4 hover:shadow-lg transition"
+        style={{ background: "#0b1220", color: "#e6eef8" }}
+      >
+        <div className="flex items-center gap-4">
+          <div
+            className="w-24 h-24 rounded-2xl flex items-center justify-center p-3"
+            style={{ background: bg }}
+          >
+            <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center bg-white/20">
+              {imgOk ? (
+                <img
+                  src={svgPath}
+                  alt={c.codename}
+                  onError={() => setImgOk(false)}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-xl font-bold text-white">
+                  {c.codename[0]}
+                </div>
+              )}
+            </div>
+          </div>
 
           <div>
-            <div className="card-title">{c.codename}</div>
-            <div className="card-sub">{c.role}</div>
+            <div className="font-bold">{c.codename}</div>
+            <div className="text-sm text-gray-400">{c.role}</div>
           </div>
         </div>
 
-        <p className="card-desc">{c.description}</p>
+        <p className="mt-3 text-sm text-gray-300">{c.description}</p>
       </div>
     </Link>
-  )
+  );
 }

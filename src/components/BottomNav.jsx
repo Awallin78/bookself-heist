@@ -1,7 +1,5 @@
 import React from 'react'
 
-import Button from './ui/Button'
-
 export default function BottomNav({ current, onNavigate }) {
   const items = [
     { id: 'home', label: 'Home' },
@@ -11,17 +9,17 @@ export default function BottomNav({ current, onNavigate }) {
   ]
 
   return (
-    <nav className="bottom-nav">
-      {items.map((it) => (
-        <Button
+    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] bg-white rounded-2xl shadow-lg p-3 flex justify-between">
+      {items.map(it => (
+        <button
           key={it.id}
-          variant={current === it.id ? 'default' : 'ghost'}
-          size="sm"
-          className={`bottom-nav__item ${current === it.id ? 'active' : ''}`}
           onClick={() => onNavigate(it.id)}
+          className={`flex-1 py-2 text-center text-sm font-medium rounded-lg ${
+            current === it.id ? "bg-gray-200" : ""
+          }`}
         >
           {it.label}
-        </Button>
+        </button>
       ))}
     </nav>
   )

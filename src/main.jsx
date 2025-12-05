@@ -13,9 +13,9 @@ import CharactersPage from "./pages/CharactersPage";
 import CharacterDetail from "./pages/CharacterDetail";
 import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
+import AdminPage from "./pages/AdminPage";
 import BottomNav from "./components/BottomNav";
 import PWABadge from "./components/PWABadge";
-import Layout from "./components/Layout";
 
 function AppShell() {
   const navigate = useNavigate();
@@ -47,16 +47,17 @@ function AppShell() {
   };
 
   return (
-    <div className="min-h-screen pb-28">
-      <Layout>
+    <div className="min-h-screen pb-28 app-bg flex flex-col">
+      <div className="flex-1 flex flex-col w-full overflow-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/character/:id" element={<CharacterDetail />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
-      </Layout>
+      </div>
 
       <PWABadge />
       <BottomNav current={currentRoute} onNavigate={handleNav} />
