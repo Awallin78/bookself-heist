@@ -3,16 +3,33 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark; /* Kita paksa Dark Mode biar tulisan putih */
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- BAGIAN UTAMA: BACKGROUND --- */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  
+  /* INI YANG HARUS DIGANTI: */
+  background-image: url('/mask-bg.jpg'); 
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-color: #000;
+  color: white;
+}
+
+/* Styling Link (Hyperlink) */
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,71 +39,14 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: grid;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  position: relative;
-  background-color: #242424;
-}
-
-/* Decorative background removed from `body::before`.
-   The mask is now provided by `.app-bg::before` so it's centered
-   and consistently visible behind the application UI. */
-
-/* App container background (applies to the main app shell) */
-.app-bg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: center;
-  min-height: 100vh;
-  width: 100%;
-}
-.app-bg::before {
-  /* Use fixed so the mask is centered on the viewport, not the content box */
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: url("/images/mask.jpg");
-  background-repeat: no-repeat;
-  /* center exactly in the viewport */
-  background-position: center center;
-  /* make the mask large and responsive */
-  background-size: 100%;
-  /* slightly more visible on a true-black base */
-  opacity: 0.18;
-  mix-blend-mode: overlay;
-  z-index: 0;
-}
-.app-bg > * {
-  position: relative;
-  z-index: 1;
-}
-
-@media (max-width: 640px) {
-  body::before {
-    background-size: 22rem;
-    background-position: center top;
-    opacity: 0.04;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before {
-    transition: none;
-  }
-}
-
+/* Styling Judul */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Tambah bayangan biar terbaca di background ramai */
 }
 
+/* Styling Tombol (Button) */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -95,26 +55,32 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: white;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
   border-color: #646cff;
+  background-color: #2a2a2a;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Memastikan konten di tengah (Opsional, tergantung layout App.jsx kamu) */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+/* PAKSA semua div utama jadi transparan */
+#root, .App, [class*="bg-gray-900"] {
+  background-color: transparent !important;
+}
+
+/* Kembalikan warna untuk elemen kecil (card/form) biar gak ikut bening */
+input, button, .card, .form-container {
+   /* Biarkan default atau atur sesuai kebutuhan */
 }

@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { supabase } from "../supabase";
 import { useNavigate } from "react-router-dom";
 
 export default function CharactersPage() {
-  const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
+  const [characters, setCharacters] = useState([]);
+
+  const fetchCharacters = async () => {
+    const { data, error } = await supabase.from("characters").select("*");
+
+    if (error) console.log(error);
+    else setCharacters(data);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const col = collection(db, "characters");
-      const snapshot = await getDocs(col);
-      const list = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCharacters(list);
-    };
-
-    fetchData();
+    fetchCharacters();
   }, []);
 
   return (
@@ -29,15 +25,14 @@ export default function CharactersPage() {
         {characters.map((c) => (
           <div
             key={c.id}
+            className="border rounded p-2 cursor-pointer"
             onClick={() => navigate(`/character/${c.id}`)}
-            className="p-3 bg-white rounded-lg shadow cursor-pointer"
           >
             <img
-              src={c.imageUrl}
-              className="w-full h-32 object-cover rounded-lg"
+              src={c.image_url}
+              className="w-full h-32 object-cover rounded"
             />
-            <h2 className="font-semibold mt-2">{c.name}</h2>
-            <p className="text-sm text-gray-600">{c.city}</p>
+            <p className="mt-2 font-semibold">{c.name}</p>
           </div>
         ))}
       </div>
