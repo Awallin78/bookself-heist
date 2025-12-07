@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,7 +8,7 @@
 
   color-scheme: dark; /* Kita paksa Dark Mode biar tulisan putih */
   color: rgba(255, 255, 255, 0.87);
-  
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -17,10 +20,10 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  
+
   /* INI YANG HARUS DIGANTI: */
-  background-image: url('/mask-bg.jpg'); 
-  
+  background-image: url("/mask-bg.jpg");
+
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -76,11 +79,16 @@ button:focus-visible {
   text-align: center;
 }
 /* PAKSA semua div utama jadi transparan */
-#root, .App, [class*="bg-gray-900"] {
+#root,
+.App,
+[class*="bg-gray-900"] {
   background-color: transparent !important;
 }
 
 /* Kembalikan warna untuk elemen kecil (card/form) biar gak ikut bening */
-input, button, .card, .form-container {
-   /* Biarkan default atau atur sesuai kebutuhan */
+input,
+button,
+.card,
+.form-container {
+  /* Biarkan default atau atur sesuai kebutuhan */
 }
